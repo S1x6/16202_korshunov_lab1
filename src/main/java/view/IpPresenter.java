@@ -52,11 +52,14 @@ public class IpPresenter {
         @Override
         public void run() {
             long currentTime = System.currentTimeMillis();
+            boolean change = false;
             for (int i = 0; i < addresses.size(); ++i) {
                 if (currentTime - addresses.get(i).getTime() > 6 * 1000) {
                     addresses.remove(addresses.get(i));
+                    change = true;
                 }
             }
+            if (change) redraw();
         }
     }
 }

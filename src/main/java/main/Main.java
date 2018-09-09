@@ -19,6 +19,7 @@ public class Main {
         } catch (UnknownHostException e) {
             System.out.println("Wrong address format. Please provide a valid Ipv4 or Ipv6 address");
         } catch (SocketException e) {
+            e.printStackTrace();
             System.out.println("Provided Ip address is not a multicast address");
         } catch (IOException e) {
             e.printStackTrace();
