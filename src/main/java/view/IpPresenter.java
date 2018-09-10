@@ -7,23 +7,26 @@ import java.util.TimerTask;
 
 public class IpPresenter {
     private List<IpAddress> addresses;
-    private String selfIp;
+   // private String selfIp;
     private Timer timer;
-    public IpPresenter(String selfIp) {
-        this.selfIp = selfIp;
+    public IpPresenter() {
+       // this.selfIp = selfIp + " <- self";
         addresses = new ArrayList<>();
         timer = new Timer(true);
         timer.schedule(new AliveCheckerTimerTask(),0,6 * 1000);
+        redraw();
     }
 
-    public void addAddress(IpAddress ip) {
-        if (ip.getIp().equals(selfIp)) return;
+    public boolean addAddress(IpAddress ip) {
+        //if (ip.getIp().equals(selfIp)) return false;
         if (addresses.contains(ip)) {
             addresses.get(addresses.indexOf(ip)).updateTime();
+            return false;
         } else {
             addresses.add(ip);
             System.out.println(ip);
         }
+        return true;
     }
 
     public void removeAddress(IpAddress ip) {
@@ -38,7 +41,7 @@ public class IpPresenter {
 
     private void redraw() {
         System.out.println("---------------");
-        System.out.println(selfIp);
+       // System.out.println(selfIp);
         addresses.forEach(System.out::println);
     }
 
