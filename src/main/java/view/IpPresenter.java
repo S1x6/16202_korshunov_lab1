@@ -1,6 +1,5 @@
 package view;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -38,11 +37,7 @@ public class IpPresenter {
     }
 
     private void redraw() {
-        try {
-            Runtime.getRuntime().exec("clear");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        System.out.println("---------------");
         System.out.println(selfIp);
         addresses.forEach(System.out::println);
     }
