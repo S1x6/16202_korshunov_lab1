@@ -5,10 +5,7 @@ import view.IpPresenter;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.InetAddress;
-import java.net.MulticastSocket;
-import java.net.SocketTimeoutException;
+import java.net.*;
 import java.util.Arrays;
 
 public class Connection implements Closeable {
@@ -26,10 +23,10 @@ public class Connection implements Closeable {
     }
 
     public void listen() throws IOException {
-        IpPresenter presenter = new IpPresenter(socket.getInterface().getHostAddress());
         byte[] buf = new byte[1];
         DatagramPacket hi = new DatagramPacket(msgAsk, msgAsk.length, groupIp, 6790);
         socket.send(hi);
+        IpPresenter presenter = new IpPresenter();
         DatagramPacket rcvPacket = new DatagramPacket(buf, buf.length);
         while (true) {
             try {
@@ -38,12 +35,14 @@ public class Connection implements Closeable {
                     presenter.addAddress(new IpAddress(rcvPacket.getAddress().getHostAddress()));
                     hi = new DatagramPacket(msgAnswer, msgAnswer.length, rcvPacket.getAddress(), 6790);
                     socket.send(hi);
+                    //System.out.println("sending 1");
                 } else if (Arrays.equals(rcvPacket.getData(), msgAnswer)) { // update state or add ip
                     presenter.addAddress(new IpAddress(rcvPacket.getAddress().getHostAddress()));
                 }
             } catch (SocketTimeoutException e) { // ask who is alive
                 hi = new DatagramPacket(msgAsk, msgAsk.length, groupIp, 6790);
                 socket.send(hi);
+                //System.out.println("sending 2");
             }
         }
     }
